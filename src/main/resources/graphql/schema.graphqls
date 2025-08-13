@@ -1,0 +1,59 @@
+## schema.graphqls
+
+enum Role {
+    EMPLOYEE
+    MANAGER
+    HR
+    ADMIN
+}
+
+enum Visibility {
+    PUBLIC
+    PRIVATE
+}
+
+type Team {
+    id: ID!
+    name: String!
+    members: [Employee!]!
+}
+
+type Employee {
+    id: ID!
+    name: String!
+    email: String!
+    teamId: ID!
+    role: Role!
+    team: Team
+}
+
+type Recognition {
+    id: ID!
+    sender: Employee
+    recipient: Employee!
+    message: String!
+    visibility: Visibility!
+    isAnonymous: Boolean!
+    createdAt: String!
+}
+
+type Query {
+    teams: [Team!]!
+    employees: [Employee!]!
+    recognitions(recipientId: ID): [Recognition!]!
+    myRecognitions:[Recognition!]!
+    sentRecognitions:[Recognition!]!
+}
+
+type Mutation {
+    createRecognition(
+        recipientId: ID!
+        message: String!
+        visibility: Visibility!
+        isAnonymous: Boolean!
+    ): Recognition!
+}
+
+type Subscription {
+    recognitionReceived: Recognition!
+}
